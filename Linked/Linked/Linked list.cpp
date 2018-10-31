@@ -38,6 +38,7 @@ int countNodeHasCreated(LIST list);
 void displayTheNode(LIST list);
 int findMaxInList(LIST list, int numberOfStudent);
 int findMinInList(LIST list, int numberOfStudent);
+float findTheAveragePoint(LIST list, int numberOfStudent);
 
 //--------------------------------MAIN----------------------------------	
 int main()
@@ -173,6 +174,7 @@ void displayTheNode(LIST list)
 		printf("- Math point: %.3f\n", p->info.mathPoint);
 		printf("- English point: %.3f\n", p->info.englishPoint);
 		printf("- Physics point: %.3f\n", p->info.physicsPoint);
+		printf("- Average point: %3.f\n",p->info.averagePoint);
 		printf("\n");
 		p = p->next;
 	}
@@ -211,7 +213,7 @@ int findMaxInList(LIST list,int numberOfStudent)
 	{
 		for (int i = 0; i < numberOfStudent; i++)
 		{
-			if (p->info.englishPoint > maxPoint)
+			if (p->info.englishPoint > maxPoint) //If the	
 			{
 				maxPoint = p->info.englishPoint;
 			}
@@ -240,6 +242,7 @@ int findMinInList(LIST list, int numberOfStudent)
 	return minPoint;
 }
 
+
 float findTheAveragePoint(LIST list, int numberOfStudent)
 {
 	NODE* p = list.head;
@@ -255,4 +258,8 @@ float findTheAveragePoint(LIST list, int numberOfStudent)
 }
 
 
+//void reverseTheList(LIST list, int numberOfStudent)
+//{
+//
+//}
 //-----------------------------------FUNCTION------------------------------
