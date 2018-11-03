@@ -39,24 +39,36 @@ void displayTheNode(LIST list);
 int findMaxInList(LIST list, int numberOfStudent);
 int findMinInList(LIST list, int numberOfStudent);
 float findTheAveragePoint(LIST list, int numberOfStudent);
+void printALine();
+void askTheUserInsertLast(LIST &list, STUDENT &student);
 
 //--------------------------------MAIN----------------------------------	
 int main()
 {
 	int numberOfStudent;
 	LIST list;
+	NODE* Node = new NODE;
 	STUDENT studentInformation;
 	initialize(list);
 	askforHowManyStudent();
 	scanf_s("%d", &numberOfStudent);
 	askforStudentInformation(studentInformation, list , numberOfStudent);
+	printALine();
 	int counted = countNodeHasCreated(list);
 	bool ans = isListEmpty(list);
-	printf("List empty right?  %s\n", ans? "true": "false");
+	float theAveragePoint = findTheAveragePoint(list, numberOfStudent);
+	printf("List isn't empty right?(false = empty)  %s\n", ans? "true": "false");
 	printf("There are %d Nodes.\n", counted);	
 	displayTheNode(list);
 	int max = findMaxInList(list, numberOfStudent);
-	printf("English max point: %d", max);
+	int min = findMinInList(list, numberOfStudent);
+	printf("Max English point is: %d",max);
+	printf("Min English point is %d", min);
+	printf("\n");
+	askTheUserInsertLast(list, studentInformation);
+	int counted2 = countNodeHasCreated(list);
+	printf("There are %d Nodes\n\n", counted2);
+	displayTheNode(list);
 	_getch();
 }
 //-------------------------------MAIN------------------------------------
@@ -112,24 +124,22 @@ NODE* insertHead(LIST &list, STUDENT student)
 NODE* insertLast(LIST &list, STUDENT student,NODE* q)
 {
 	NODE* p = createNode(student);
-	if (list.head == NULL)
+	if (list.head == NULL) // If the list is empty, insert head
 	{
 		insertHead(list, student);
 	}
-	else 
+	else
 	{
-		while (true)
+		q = list.head; //Temp to hold the value
+		while (q->next != NULL) //Go to the end of the list
 		{
-			if (q->next == NULL)
-			{
-				q->next = p;
-				break;
-			}
-			q = q->next;
+			q = q->next; 
 		}
+		q->next = p; //link the node together
 	}
-	return q;
+	return p;
 }
+
 
 NODE* insertAfter(LIST &list, STUDENT student,NODE* q)
 {
@@ -142,10 +152,11 @@ NODE* insertAfter(LIST &list, STUDENT student,NODE* q)
 	return p;
 }
 
+
 //Ask for the total number of student
 void askforHowManyStudent()
 {
-	printf("How many student you want to enter:");
+	printf("How many student you want to enter: ");
 }
 
 
@@ -171,10 +182,10 @@ void displayTheNode(LIST list)
 	{
 		printf("Student name: %s\n", p->info.name);
 		printf("ID: %d\n", p->info.ID);
-		printf("- Math point: %.3f\n", p->info.mathPoint);
-		printf("- English point: %.3f\n", p->info.englishPoint);
-		printf("- Physics point: %.3f\n", p->info.physicsPoint);
-		printf("- Average point: %3.f\n",p->info.averagePoint);
+		printf("- Math point: %.2f\n", p->info.mathPoint);
+		printf("- English point: %.2f\n", p->info.englishPoint);
+		printf("- Physics point: %.2f\n", p->info.physicsPoint);
+		printf("- Average point: %.2f\n",p->info.averagePoint);
 		printf("\n");
 		p = p->next;
 	}
@@ -204,7 +215,8 @@ void askforStudentInformation(STUDENT &student , LIST &list, int numberOfStudent
 	}
 }
 
-//Find Max in List
+
+//Find Max in List --- DO IT AGAIN --- WRONG...
 int findMaxInList(LIST list,int numberOfStudent)
 {
 	int maxPoint = 0;
@@ -253,13 +265,36 @@ float findTheAveragePoint(LIST list, int numberOfStudent)
 			p->info.averagePoint = (p->info.englishPoint + p->info.mathPoint + p->info.physicsPoint)/3;
 			p->info.averagePoint = p->next->info.averagePoint;
 		}
+		
 	}
 	return p->info.averagePoint;
 }
 
 
-//void reverseTheList(LIST list, int numberOfStudent)
-//{
-//
-//}
+void printALine()
+{
+	printf("\n------------------------------------------------\n");
+}
+
+
+void askTheUserInsertLast(LIST &list, STUDENT &student)
+{
+	printf("Insert to the last of the list\n");
+	printf("Please input your data\n\n");
+	printALine();
+	printf("Please enter student ID: ");
+	scanf_s("%d", &student.ID);
+	while (getchar() != '\n');
+	printf("Please enter student name: ");
+	gets_s(student.name);
+	printf("- Math point: ");
+	scanf_s("%f", &student.mathPoint);
+	printf("- English point: ");
+	scanf_s("%f", &student.englishPoint);
+	printf("- Physics point: ");
+	scanf_s("%f", &student.physicsPoint);
+	printf("\n");
+	NODE* node = createNode(student);
+	insertLast(list, student, node);
+}
 //-----------------------------------FUNCTION------------------------------
