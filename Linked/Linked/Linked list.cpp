@@ -36,9 +36,9 @@ void askforStudentInformation(STUDENT &student, LIST &list, int numberOfStudent)
 void askforHowManyStudent();
 int countNodeHasCreated(LIST list);
 void displayTheNode(LIST list);
-int findMaxInList(LIST list, int numberOfStudent);
-int findMinInList(LIST list, int numberOfStudent);
-float findTheAveragePoint(LIST list, int numberOfStudent);
+int findMaxInList(LIST list);
+int findMinInList(LIST list);
+float findTheAveragePoint(LIST list);
 void printALine();
 void askTheUserInsertLast(LIST &list, STUDENT &student);
 
@@ -56,12 +56,12 @@ int main()
 	printALine();
 	int counted = countNodeHasCreated(list);
 	bool ans = isListEmpty(list);
-	float theAveragePoint = findTheAveragePoint(list, numberOfStudent);
+	float theAveragePoint = findTheAveragePoint(list);
 	printf("List isn't empty right?(false = empty)  %s\n", ans? "true": "false");
 	printf("There are %d Nodes.\n", counted);	
 	displayTheNode(list);
-	int max = findMaxInList(list, numberOfStudent);
-	int min = findMinInList(list, numberOfStudent);
+	int max = findMaxInList(list);
+	int min = findMinInList(list);
 	printf("Max English point is: %d",max);
 	printf("Min English point is %d", min);
 	printf("\n");
@@ -217,57 +217,51 @@ void askforStudentInformation(STUDENT &student , LIST &list, int numberOfStudent
 
 
 //Find Max in List --- DO IT AGAIN --- WRONG...
-int findMaxInList(LIST list,int numberOfStudent)
+int findMaxInList(LIST list)
 {
-	int maxPoint = 0;
 	NODE* p = list.head;
-	if (p != NULL)
+	int max;
+	max = p->info.englishPoint;
+	while (p != NULL)
 	{
-		for (int i = 0; i < numberOfStudent; i++)
+		if (p->info.englishPoint > max)
 		{
-			if (p->info.englishPoint > maxPoint) //If the	
-			{
-				maxPoint = p->info.englishPoint;
-			}
-			p->info.englishPoint = p->next->info.englishPoint;
+			max = p->info.englishPoint;
 		}
+		p = p->next;
 	}
-	return maxPoint;
+	return max;
 }
 
 
-int findMinInList(LIST list, int numberOfStudent)
+int findMinInList(LIST list)
 {
-	int minPoint = 0;
 	NODE* p = list.head;
-	if (p != NULL)
+	int min;
+	min = p->info.englishPoint;
+	while (p != NULL)
 	{
-		for (int i = 0; i < numberOfStudent; i++)
+		if (p->info.englishPoint < min)
 		{
-			if (p->info.englishPoint < minPoint)
-			{
-				minPoint = p->info.englishPoint;
-			}
-			p->info.englishPoint = p->next->info.englishPoint;
+			min = p->info.englishPoint;
 		}
+		p = p->next;
 	}
-	return minPoint;
+	return min;
 }
 
 
-float findTheAveragePoint(LIST list, int numberOfStudent)
+float findTheAveragePoint(LIST list)
 {
 	NODE* p = list.head;
-	if (p != NULL)
+	float average;
+	while (p != NULL)
 	{
-		for(int i =0;i <numberOfStudent; i++)
-		{
-			p->info.averagePoint = (p->info.englishPoint + p->info.mathPoint + p->info.physicsPoint)/3;
-			p->info.averagePoint = p->next->info.averagePoint;
-		}
-		
+		average = (p->info.englishPoint + p->info.physicsPoint + p->info.mathPoint) / 3;
+		p->info.averagePoint = average;
+		p = p->next;
 	}
-	return p->info.averagePoint;
+	return average;
 }
 
 
