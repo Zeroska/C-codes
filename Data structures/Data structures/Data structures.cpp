@@ -48,6 +48,7 @@ void interchangeSort_SapxeptheoMSSV(LIST &list);
 void hoanvi(LIST list, SINHVIEN &a, SINHVIEN &b);
 void printMainMenu();
 void xuatDanhSachSVCoDiemTB(LIST list);
+int timThongTinSVTheoTen(LIST list, char ten[]);
 
 
 		//------------------MAIN---------------------
@@ -55,7 +56,9 @@ int main()
 {
 	LIST list;
 	int option, sinhvien = 0;
-
+	char ten[TEN_MAX];
+	nhapDSLK(list, sinhvien);
+	tinhDiemTBCuaSinhVien(list);
 	do {
 		/*---------------MAIN MENU--------------*/
 		printMainMenu();
@@ -64,78 +67,82 @@ int main()
 		{
 		case 1:
 		{
-			nhapDSLK(list, sinhvien);
-			printf("||Nhap Danh sach lien ket thanh cong||\n");
+			timSVCoDiemToanBeHon8(list);
 			break;
 		}
 		case 2:
 		{
-			timSVCoDiemToanBeHon8(list);
-			break;
-		}
-		case 3:
-		{
-			tinhDiemTBCuaSinhVien(list);
-			printf("||Da tinh diem trung binh cua sinh vien.||\n");
-			break;
-		}
-		case 4:
-		{
 			xuatDanhSachSVCoDiemTB(list);
 			break;
 		}
-		case 5:
+		case 3:
 		{
 			int soSinhVienCoDiemTBLonHon7 = demSinhVienCodiemTBLonHon7(list);
 			printf("Tong so sinh vien co diem lon hon 7: %d\n\n", soSinhVienCoDiemTBLonHon7);
 			break;
 		}
-		case 6:
+		case 4:
 		{
 			printf("Sinh vien co diem Ly cao nhat la:\n");
 			NODE* sinhvien = timSVCoDiemLyCaoNhat(list);
 			printf("MSSV: %d,   Toan: %.2f,   Ly: %.2f,   Hoa: %.2f,   Ho: %20s,   Ten: %10s.\n", sinhvien->info.mssv, sinhvien->info.toan, sinhvien->info.ly, sinhvien->info.hoa, sinhvien->info.ho, sinhvien->info.ten);
 			break;
 		}
-		case 7:
+		case 5:
 		{
 			printf("Sinh vien co diem Hoa thap nhat la:\n");
 			NODE* sinhvien2 = timSVCoDiemHoaThapNhat(list);
 			printf("MSSV: %d,   Toan: %.2f,   Ly: %.2f,   Hoa: %.2f,   Ho: %20s,   Ten: %10s.\n", sinhvien2->info.mssv, sinhvien2->info.toan, sinhvien2->info.ly, sinhvien2->info.hoa, sinhvien2->info.ho, sinhvien2->info.ten);
 			break;
 		}
-		case 8:
+		case 6:
 		{
 			interchangeSort_SapxeptheoMSSV(list);
-			printf("\n---Da sap xep theo MSSV---");
+			printf("---Da sap xep theo MSSV---\n\n");
 			break;
 		}
-		case 9:
+		case 7:
 		{
 			interchangeSort_SapxepTheoTen(list);
-			printf("\n---Da sap xe theo ten---");
+			printf("---Da sap xe theo ten---\n\n");
 			break;
 		}
-		case 10:
+		case 8:
+		{
+			printf("Nhap ten sinh vien can tim: ");
+			gets_s(ten);
+			while (getchar() != '\n');
+			int timTen = timThongTinSVTheoTen(list, ten);
+			if (timTen == 1)
+			{
+				printf("Found one.\n");
+			}
+			else
+			{
+				printf("Clueless.\n");
+			}
 			break;
 		}
-	} while (option != 13);
+		}
+	} while (option != 10);
+	{
+		printf("GoodBye\n");
+	}
+	_getch();
 }
 		//---------------FUNCTIONs-------------------
 void printMainMenu()
 {
 	printf("-----------------------------MAIN MENU------------------------|");
-	printf("\n1.Nhap danh sach lien ket.                                    |");
-	printf("\n2.Tim sinh vien co diem toan be hon 8.                        |");
-	printf("\n3.Tinh diem trung binh cua sinh vien.                         |");
-	printf("\n4.Xuat danh sach co diem TB.                                  |");
-	printf("\n5.Dem sinh vien co diem TB lon hon 7.                         |");
-	printf("\n6.Tim sinh vien co diem Ly cao nhat.                          |");
-	printf("\n7.Tim sinh vien co diem hoa thap nhat.                        |");
-	printf("\n8.Sap xep theo MSSV (ma so sinh vien).                        |");
-	printf("\n9.Sap xep theo Ten.                                           |");
-	printf("\n10.Tim thong tinh sinh vien theo Ten.                         |");
-	printf("\n13.Thoat khoi chuong trinh.                                   |");
+	printf("\n1.Tim sinh vien co diem toan be hon 8.                        |");
+	printf("\n2.Xuat danh sach co diem TB.                                  |");
+	printf("\n3.Dem sinh vien co diem TB lon hon 7.                         |");
+	printf("\n4.Tim sinh vien co diem Ly cao nhat.                          |");
+	printf("\n5.Tim sinh vien co diem hoa thap nhat.                        |");
+	printf("\n6.Sap xep theo MSSV (ma so sinh vien).                        |");
+	printf("\n7.Sap xep theo Ten.                                           |");
+	printf("\n8.Tim thong tinh sinh vien theo Ten.                          |");
+	printf("\n10.Thoat khoi chuong trinh.                                   |");
 	printf("\n--------------------------------------------------------------|");
 	printf("\n\nLua chon cua ban : ");
 }
@@ -180,6 +187,7 @@ NODE* insertHead(LIST &list, SINHVIEN sinhvien)
 	return p;
 }
 
+
 NODE* insertLast(LIST &list, SINHVIEN sinhvien, NODE* q)
 {
 	NODE* p = createNode(sinhvien);
@@ -189,12 +197,12 @@ NODE* insertLast(LIST &list, SINHVIEN sinhvien, NODE* q)
 	}
 	else
 	{
-		q = list.head;
+		q = list.head; 
 		while (q->next != NULL)
 		{
 			q = q->next;
 		}
-		q->next = p;
+		q->next = p; //linked
 	}
 	return p;
 }
@@ -247,7 +255,7 @@ void timSVCoDiemToanBeHon8(LIST list)
 	{
 		while (p != NULL)
 		{
-			if (p->info.hoa <= 8)
+			if (p->info.toan < 8)
 			{ 
 				printf("MSSV: %d,   Toan: %.2f,   Ly: %.2f,   Hoa: %.2f,   Ho: %20s,   Ten: %10s.\n",p->info.mssv,p->info.toan,p->info.ly,p->info.hoa,p->info.ho,p->info.ten);
 			}
@@ -395,10 +403,24 @@ void interchangeSort_SapxepTheoTen(LIST &list)
 		{
 			if (strcmp(p->info.ten, q->info.ten) > 0)
 			{
-				hoanvi(list, p->info, q->info);
+				hoanvi(list, q->info, p->info);
 			}
+			q = q->next;
 		}
-		q = q->next;
+		p = p->next;
 	}
-	p = p->next;
+}
+
+
+int timThongTinSVTheoTen(LIST list, char ten[])
+{
+	NODE* p = list.head;
+	while (p != NULL)
+	{
+		if (strcmp(p->info.ten, ten) == 0)
+		{
+			return 1;
+		}
+		p = p->next;
+	}
 }
