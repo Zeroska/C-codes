@@ -1,0 +1,11 @@
+﻿PC World, 22/12/1999, 000006, 30000, N/A
+Hacker New, 23/3/1986, 000004, 50000, DoctorWho
+Rolling Stone, 9/11/1967, 000001, 150000, Jann Wenner
+Elle, 19/5/1945, 000011, 175000, Pierre Lazareff
+Elle, 19/5/1945, 000012, 175000, Pierre Lazareff
+Elle, 19/5/1945, 000014, 175000, Pierre Lazareff
+People, 15/2/1963, 000003, 120000, Richard Durrell
+Vogue, 18/5/1892, 000015, 300000, Conde' Nast
+Wired, 28/9/1993, 000008, 100000, Louis Rossetto
+Time, 1/5/1923, 000010, 175000, Henry Luce
+Elle, 19/5/1945, 000013, 175000, Pierre Lazareff

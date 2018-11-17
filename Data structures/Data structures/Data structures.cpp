@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include <conio.h>
 #include <string.h>
+#include <ctype.h>
 
 #define HO_MAX 30
 #define TEN_MAX 10
@@ -49,12 +50,18 @@ void hoanvi(LIST list, SINHVIEN &a, SINHVIEN &b);
 void printMainMenu();
 void xuatDanhSachSVCoDiemTB(LIST list);
 int timThongTinSVTheoTen(LIST list, char ten[]);
+void xuatFile(char* fileOutput, LIST list);
+void makeUserInputFreely(char string[]);
+void outputWhenFoundTheName(int foundedOrNot);
+void askForThePath();
+void themSVTheoThuTuMSSV(LIST &list);
 
 
 		//------------------MAIN---------------------
 int main()
 {
 	LIST list;
+	char fileoutput[50];
 	int option, sinhvien = 0;
 	char ten[TEN_MAX];
 	nhapDSLK(list, sinhvien);
@@ -110,21 +117,33 @@ int main()
 		case 8:
 		{
 			printf("Nhap ten sinh vien can tim: ");
-			gets_s(ten);
 			while (getchar() != '\n');
+			gets_s(ten);
+			makeUserInputFreely(ten);
 			int timTen = timThongTinSVTheoTen(list, ten);
-			if (timTen == 1)
-			{
-				printf("Found one.\n");
-			}
-			else
-			{
-				printf("Clueless.\n");
-			}
+			outputWhenFoundTheName(timTen);
+			break;
+		}
+		case 9:
+		{
+			
+			break;
+		}
+		case 10:
+		{
+			themSVTheoThuTuMSSV(list);
+			break;
+		}
+		case 11:
+		{
+			askForThePath();
+			while (getchar() != '\n');
+			gets_s(fileoutput);
+			xuatFile(fileoutput, list);
 			break;
 		}
 		}
-	} while (option != 10);
+	} while (option != 12);
 	{
 		printf("GoodBye\n");
 	}
@@ -142,7 +161,10 @@ void printMainMenu()
 	printf("\n6.Sap xep theo MSSV (ma so sinh vien).                        |");
 	printf("\n7.Sap xep theo Ten.                                           |");
 	printf("\n8.Tim thong tinh sinh vien theo Ten.                          |");
-	printf("\n10.Thoat khoi chuong trinh.                                   |");
+	printf("\n9.Xoa sinh vien theo MSSV.                                    |");
+	printf("\n10.Them sinh vien theo MSSV.                                  |");
+	printf("\n11.Xuat file.                                                 |");
+	printf("\n12.Thoat khoi chuong trinh.                                   |");
 	printf("\n--------------------------------------------------------------|");
 	printf("\n\nLua chon cua ban : ");
 }
@@ -396,9 +418,9 @@ void interchangeSort_SapxepTheoTen(LIST &list)
 {
 	NODE* p = list.head;
 	
-	while (p->next != NULL)
+	while (p->next != NULL) // Next isn't NULL
 	{
-		NODE* q = p->next;
+		NODE* q = p->next; 
 		while (q != NULL)
 		{
 			if (strcmp(p->info.ten, q->info.ten) > 0)
@@ -415,12 +437,144 @@ void interchangeSort_SapxepTheoTen(LIST &list)
 int timThongTinSVTheoTen(LIST list, char ten[])
 {
 	NODE* p = list.head;
+	int ans = -1;  //Set the base ans = -1;
 	while (p != NULL)
 	{
-		if (strcmp(p->info.ten, ten) == 0)
+		if (strcmp(p->info.ten, ten) == 0) //if name == name => ans = 1.
 		{
-			return 1;
+			ans = 1;
 		}
 		p = p->next;
 	}
+	return ans;
+}
+
+
+bool deleteHead(LIST &list)
+{
+	if (!isListEmpty(list))//check whether the list is empty or not. 
+	{
+		NODE* p = list.head;//If list == FULL.
+		p = p->next;
+		delete p; //delete the first Node.
+		return true;	
+	}
+	return false;
+}
+
+
+NODE* search2(LIST list, SINHVIEN sinhvien,NODE* &q)
+{
+	NODE* p = list.head;
+	while (p != NULL)
+	{
+		if (p->info.mssv == sinhvien.mssv )
+		{
+			break;
+		}
+		p = q;
+		p = p->next;
+	}
+	return p;
+}
+
+
+bool deleteAfter(LIST &list, NODE* q )
+{
+	if (q != NULL)
+	{
+		NODE* p = q->next;
+		if (p != NULL)
+		{
+			q->next = p->next;
+			delete p;
+			return true;
+		}
+	}
+	return false;
+}
+
+
+bool deleteNode(LIST &list, SINHVIEN sinhvien)
+{
+	NODE* q = NULL;
+	NODE* p = search2(list, sinhvien, q);
+	if (p == NULL)
+	{
+		return false;
+	}
+	if (q == NULL)
+	{
+		return deleteHead(list);
+	}
+	else
+	{
+		return deleteAfter(list, q);
+	}
+}
+
+
+void makeUserInputFreely(char string[])
+{
+	int L = strlen(string);//The lenght of the string
+	string[0] = toupper(string[0]); //Upper case the first letter 
+	for (int i = 1; i < L; i++)
+	{
+		string[i] = tolower(string[i]);//Lower case the rest of the string.
+	}
+}
+
+
+void outputWhenFoundTheName(int foundedOrNot)
+{
+	if (foundedOrNot == 1)
+	{
+		printf("Found one bois.");
+	}
+	printf("I don't know this person");
+}
+
+
+void askForThePath()
+{
+	printf("Ban muon xuat file o dau: ");
+}
+
+
+SINHVIEN themSinhVien()
+{
+	SINHVIEN sv;
+	sv.mssv = 215;
+	strcpy(sv.ho, "NguyenHuy");
+	strcpy(sv.ten, "Hoang");
+	sv.toan = 7.6;
+	sv.hoa = 8.2;
+	sv.ly = 7.7;
+	sv.diemtb = 0;
+	return sv;
+}
+
+
+void themSVTheoThuTuMSSV(LIST &list)
+{
+	int dem = 0;
+	NODE* p = list.head;
+	SINHVIEN sv = themSinhVien();
+
+	if (p != NULL && p->info.mssv > sv.mssv)
+		insertHead(list, sv);
+	else
+	{
+		while (p->next != NULL && p->info.mssv < sv.mssv)
+			p = p->next;
+		insertLast(list, sv, p);
+	}
+	xuatDanhSachSVCoDiemTB(list);
+}
+
+
+void bubbleSort(LIST &list)
+{
+	NODE* p = list.head;
+	
 }
