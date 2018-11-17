@@ -45,7 +45,7 @@ namespace NguyenDangKhuong_2175415
                         }
                     case 3:
                         {
-                            Console.WriteLine("HERE IS YOUR SORTED LIST");
+                            Console.WriteLine("HERE IS YOUR SORTED LIST.");
                             library.sortByNameAndID();
                             library.Output();
                             break;
